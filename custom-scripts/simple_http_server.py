@@ -2,7 +2,7 @@ import time
 import BaseHTTPServer
 from datetime import datetime
 import pytz
-
+import os
 
 HOST_NAME = '0.0.0.0'
 PORT_NUMBER = 8000
@@ -31,7 +31,25 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 	uptime = fileup.read().split(' ')[0]
 	s.wfile.write("<p>Uptime: %s</p>" % uptime)
 
-	cpuinfo = 
+	filecpu = open("/proc/cpuinfo", "r")
+	cpuinfo = filecpu.read().split('\n')
+	s.wfile.write("<p>%s</p>" % cpuinfo[4])
+	s.wfile.write("<p>%s</p>" % cpuinfo[6])
+	
+	filestat = os.popen("iostat").read().split(' ')
+	while("" in filestat): filestat.remove("")
+	cpuuti = int(filestat[12],10) + int(filestat[13],10)
+	s.wfile.write("<p>CPU utilization percentage: %s</p>" % cpuuti)
+
+	filemem = open("/proc/meminfo").read().split('\n')
+	s.wfile.write("<p>%s</p>" % filemem[0])
+	s.wfile.write("<p>%s</p>" % filemem[1])
+
+	filever = open("/proc/version").read()
+	s.wfile.write("<p>System Version: %s</p>" % filever)
+
+	fileps = os.popen("ps | tr -s ' ' | cut -d' ' -f2,4 | sed 's/^/\<\/br\>/g'").read()
+	s.wfile.write("<p>Running Processes %s</p>" % fileps)
 
         s.wfile.write("</body></html>")
 

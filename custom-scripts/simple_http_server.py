@@ -49,7 +49,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 	s.wfile.write("<p>System Version: %s</p>" % filever)
 
 	fileps = os.popen("ps | tr -s ' ' | cut -d' ' -f2,4 | sed 's/^/\<\/br\>/g'").read()
-	s.wfile.write("<p>Running Processes %s</p>" % fileps)
+	s.wfile.write("<p>Running Processer %s</p>" % fileps)
 
         s.wfile.write("</body></html>")
 
